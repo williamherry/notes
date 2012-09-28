@@ -8,6 +8,6 @@
 
 ## install chef client on redhat/centos
 
-   curl -L http://www.opscode.com/chef/install.sh | bash
+    curl -L http://www.opscode.com/chef/install.sh | bash
 
 
