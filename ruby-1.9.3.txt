@@ -1,0 +1,2 @@
+Could not open library 'lib.so': lib.so: cannot open shared object file: No such file or directory (LoadError)
+
