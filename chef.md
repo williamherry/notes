@@ -16,15 +16,13 @@ In Chef, Resources represent a piece of system state and Providers are the under
 
 ### The chef-client runs in two stages
 
-1. The compilation phase
-
+1. The compilation phase  
    The client examines each *Recipe* in order and adds its *Resources* to the *ResourceCollection*
 
-2. The execution phase
-
+2. The execution phase  
    The client iterates over the ResourceCollection, and performs the following:
 
-- Based on the Resource's "provider" attribute, a new instance of the specified Provider is created (if the attribute is not set, one is selected based on the local platform).
+- Based on the Resource's "provider" attribute, a new instance of the specified Provider is created (if the attribute is not set, one is selected based on the local platform).  
   The originating Resource is stored in the new Provider as the `@new_resource` instance variable and is accessible when writing LWPs as `new_resource.name`, for example.
 
 - The `load_current_resource` method is then called on the provider instance, giving it an opportunity to populate `@current_resource` with a new resource that represents the current state of the relevant part of the system.
