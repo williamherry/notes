@@ -1,4 +1,4 @@
-# Install chef server on redhat/centos
+### Install chef server on redhat/centos
 
     rpm -Uvh http://rbel.frameos.org/rbel6
     yum -y install rubygem-chef-server
