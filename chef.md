@@ -6,15 +6,15 @@
     setup-chef-server.sh
     knife configure -i
 
-# Install chef client on redhat/centos
+### Install chef client on redhat/centos
 
     curl -L http://www.opscode.com/chef/install.sh | bash
 
-# Resources and Providers
+### Resources and Providers
 
 In Chef, Resources represent a piece of system state and Providers are the underlying implementation which brings them into that state.
 
-# The chef-client runs in two stages
+### The chef-client runs in two stages
 
 1. The compilation phase
 

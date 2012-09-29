@@ -1,4 +1,4 @@
-# Use parted to partion a disk(in script)
+### Use parted to partion a disk(in script)
 
     # install parted of course
     yum -y install parted
