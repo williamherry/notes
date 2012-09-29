@@ -12,14 +12,16 @@
 
 # Resources and Providers
 
-    In Chef, Resources represent a piece of system state and Providers are the underlying implementation which brings them into that state.
+In Chef, Resources represent a piece of system state and Providers are the underlying implementation which brings them into that state.
 
 # The chef-client runs in two stages
 
 1. The compilation phase
+
    The client examines each *Recipe* in order and adds its *Resources* to the *ResourceCollection*
 
 2. The execution phase
+
    The client iterates over the ResourceCollection, and performs the following:
 
 - Based on the Resource's "provider" attribute, a new instance of the specified Provider is created (if the attribute is not set, one is selected based on the local platform).
