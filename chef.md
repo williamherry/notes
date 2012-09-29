@@ -29,3 +29,32 @@ In Chef, Resources represent a piece of system state and Providers are the under
 
 - For each action specified in `@new_resource.actions`, the `action_` method that corresponds to each action is called(e.g. `action :create will` invoke the `action_create` method of the Provider instance.)
 
+
+### Errors
+
+     Server doesn't support resource history, skipping resource report.
+
+### Loads cookbook components
+
+- Libraries
+- Providers
+- Resources
+- Attributes
+- Definitions
+- Recipes
+
+The *order* is important because of where you can put things, and when things are available.
+
+### Provider is chosen by `Chef::Platform`
+
+This is how platform specific providers are chosen like apt/yum, useradd, etc. It also contains logic to get the provider for the resource...
+
+### Chef::Platform finds the provider
+
+- Specifically named parameter
+- Platform assigned providers
+- Matching the resource name
+
+Specifically named providers are like we saw earlier where the resource itself had the provider parameter.
+Platform assigned are the ones like apt/yum for packages.
+Matching the resource name is how LWRPs get chosen.
