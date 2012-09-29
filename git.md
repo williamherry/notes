@@ -12,3 +12,7 @@
 
     # The above is syntactic sugar for
     git push origin :<branch_name>
+
+### fix last commit(`--amend`)
+
+    git commit --amend
