@@ -13,6 +13,10 @@
     # The above is syntactic sugar for
     git push origin :<branch_name>
 
-### fix last commit(`--amend`)
+### Fix last commit(`--amend`)
 
     git commit --amend
+
+### Enable color
+
+    git config --global color.ui true

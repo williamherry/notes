@@ -22,3 +22,8 @@
     # mkfs(format)
     mkfs.ext3 /dev/vdb1
     mkfs.ext4 /dev/vdb2
+
+### Bash Completion
+
+    cp contrib/completion/git-completion.bash /etc/bash_completion.d/
+    . /etc/bash_completion
