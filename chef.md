@@ -62,3 +62,10 @@ Matching the resource name is how LWRPs get chosen.
 ### What is Definitions
 
 Definetions allow you to create new Resources by stringing together existing resources.
+
+### tips from Darren Birkett
+
+    git clone https://github.com/rcbops/chef-cookbooks.git
+    cd chef-cookbooks
+    git checkout sprint
+    git submodule update --init
