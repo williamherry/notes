@@ -436,3 +436,13 @@ Note: .gitignore only work for files that untrached, file already add to index o
 
     # reset bisect
     git bisect reset
+
+### Git cherry-pick
+
+    git cherry-pick E
+
+### Misc
+
+    git rev-list HEAD
+
+    git ls-remote origin
