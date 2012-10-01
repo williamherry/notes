@@ -144,7 +144,7 @@
 
 ### generate the hash(`\000` means <null>)
 
-- generate commit hash
+#### generate commit hash
 
     # get the size of commit
     git cat-file commit HEAD | wc -c
@@ -158,7 +158,7 @@
     git rev-parse HEAD
     6bfa2893ae634c4284aa123a68378151ac11e347
 
-- generate content hash
+#### generate content hash
 
     # get the size of content
     git cat-file blob HEAD:welcome.txt | wc -c
@@ -172,7 +172,7 @@
     git rev-parse HEAD:welcome.txt
     74049a0123148161c26acb2812d290140665f5d3
 
-- generate tree hash
+#### generate tree hash
 
     # get the size of tree
     git cat-file tree HEAD^{tree} | wc -c
