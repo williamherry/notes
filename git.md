@@ -280,3 +280,159 @@
 ### Move
 
     git mv welcome.txt README
+
+### Interactive add file
+
+    git add -i
+
+### Gitignore
+
+    # Show the file that has been ignored
+    git status --ignored -s
+
+    # ignored file can be added use add and -f option
+    git add -f hello.h
+
+    # local ignore
+    .git/info/exclude
+    # or
+    git config --global core.excludesfile /home/william/.gitignore
+
+    # example of .gitignore file
+    *.a       # ignore all file that postfix with .a
+    !lib.a    # do NOT ignore lib.a directory or file
+    /TODO     # only ignore TODO file under /
+    build/    # ignore all file under build/
+    doc/*.txt # ignore all file like doc/notes.txt, but not doc/server/arch.txt
+
+Note: .gitignore only work for files that untrached, file already add to index or repo are not affect
+
+### Archive
+
+    git archive -o latest.zip HEAD
+
+    git archive -o partial.tat HEAD src doc
+
+    git archive --format=tar --prefix=1.0 | gzip > foo-1.0.tar.gz
+
+    git tar-commit-id latest.zip
+
+### Count commits
+
+    git rev-list HEAD | wc -l
+
+### Git rev-parse command
+
+    # list branch
+    git rev-parse --symbolic --branches
+
+    # list tags
+    git rev-parse --symbolic --tags
+
+    # show all refs
+    git rev-parse --symbolic --glob=refs/*
+
+    # translate Git object to hash
+    git rev-parse HEAD
+
+    git rev-parse master refs/heads/master
+
+    git rev-parse 6652 6652a0d
+
+    git rev-parse A refs/tags/A
+
+    git rev-parse A^{} A^0 A^{commit}
+
+    git rev-parse A^ A^1 B^0
+
+    git rev-parse A^^3^2 F^2 J^{}
+
+    git rev-parse A~3 A^^^ G^0
+
+    git rev-parse A^{tree} A:
+
+    git rev-parse A^{tree}:src/Makefile A:src/Makefile
+
+    git rev-parse :gitg.png HEAD:gitg.png
+
+    git rev-parse :/"Commit A"
+
+    git rev-parse HEAD@{0} master@{0}
+
+### Git log
+
+    git log --oneline F^! D
+
+    git --graph --oneline
+
+    git git log -3 --pretty=oneline
+
+    git log -p -1
+
+    git log --stat --oneline I..C
+
+    git log --pretty=raw -1
+
+    git log --pretty=fuller -1
+
+    git log --pretty=oneline -1
+
+    git show D --stat
+
+    git cat-file -p D^0
+
+### Git diff
+
+    git diff B A            # compate tag B and tag A
+    git diff A              # diff work area and tag A
+    git diff --cached A     # diff index area and tag A
+    git diff                # diff work area and index area
+    git diff --cached       # diff index area and HEAD
+    git diff HEAD           # diff work area and HEAD
+
+    git diff --word-diff
+
+### Git blame
+
+    git blame README
+
+    git blame -L 6,+5 README
+
+### Git bisect
+
+    # manually
+    git bisect start
+    git bisect bad
+    git bisect good G
+    ls doc/B.txt
+    git good
+    ls doc/B.txt
+    git bad
+    ...
+
+    # automatically
+    cat > good-or-bad.sh <<-EOF
+    #!/bin/sh
+
+    [ -f doc/B.txt ] && exit 1
+    exit 0
+    EOF
+
+    git bisect start master G
+    git bisect run sh good-or-bad.sh
+
+    git describe refs/bisect/bad
+
+    # checkout example
+    git ls-tree 776c5c9 README
+    git ls-tree -r refs/tags/D doc
+
+    git checkout HEAD^^
+
+    git checkout refs/tags/D -- README
+    git checkout 776c5c9 -- doc
+
+    git show 776c5c9:README > README.OLD
+
+    # reset bisect
+    git bisect reset
