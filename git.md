@@ -217,7 +217,7 @@
     # or
     git checkout .
 
-### Stash
+### Stash(not very clean)
 
     # Save the work that not ready for commit(I'll be back)
     git stash
@@ -228,6 +228,21 @@
     # pop most recent stash
     git stash pop
 
+    # save stash
+    git stash save "message..."
+
+    # drop stash
+    git stash drop [<stash>]
+
+    # clear all stash
+    git stash clear
+
+    # create branch based on stash
+    git stash branch <branchname> <stach>
+
+    # apply stash
+    git stash apply [--index] [<stash>]
+
 ### Clean
 
     # dry-run
@@ -235,3 +250,33 @@
 
     # force
     git clean -fd
+
+### Tag
+
+    git tag -m "Say bye-bye to all previous practice." old_practice
+    git describe
+
+### Delete and restore file
+
+    # delete files(using: git rm)
+    rm -rf *.txt
+    git rm detached-commit.txt hack-1.txt new-commit.txt welcome.txt
+    git commit -m "delete trash files. (using: git rm)"
+
+    # delete files(using: git add -u)
+    rm -rf *.txt
+    git add -u
+    git commit -m "delete trash files. (using: git add -u)"
+
+    # restore file(using: cat-file)
+    git cat-file -p HEAD~1:welcome.txt > welcome.txt
+
+    # restore file(using: show)
+    git show HEAD~1:welcome.txt > welcome.txt
+
+    # restore file(using: checkout)
+    git checkout HEAD~1 -- welcome.txt
+
+### Move
+
+    git mv welcome.txt README
