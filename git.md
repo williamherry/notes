@@ -256,6 +256,104 @@
     git tag -m "Say bye-bye to all previous practice." old_practice
     git describe
 
+    # list tags
+    git tag
+
+    # list tags and show one line of desc
+    git tag -n1
+
+    # wildcard
+    git tag -l jx/v2*
+
+    # use git log to show tags
+    git log --oneline --decorate
+
+    git describe
+
+    # if work area has changes, can use --dirty to show up
+    echo hacked >> README; git describe --dirty; dit checkout -- README
+
+    git describe master^ --always
+
+    git name-rev HEAD
+
+    git name-rev HEAD --tags
+
+    git log --pretty=oneline origin/helper/master | \
+      git name-rev --tags --stdin
+
+    # light tag
+    git tag mytag
+
+    # secret of light tag(just a point to one commit
+    cat .git/refs/tags/mytag
+    git cat-file -t mytag
+    git cat-file -p mytag
+
+Note: cons of light tag is that there is no way to know who and when create this tag, should not use this in team work
+
+Note: git describe do not generate describe string use light tag
+
+    # annotated tag
+    git commit --allow-empty -m "blank commit for annotated tag test."
+    git tag -m "My first annotated tag." mytag2
+    git tag -l my* -n1
+
+    # secret of annotated tag(create a tag object)
+    cat .git/refs/tags/mytag2
+    git cat-file -t mytag2
+    git cat-file -p mytag2
+
+    git cat-file tag mytag2 | wc -c
+    (printf "tag 148\000"; git cat-file tag mytag2) | sha1sum
+
+    # although tag mytag2 is a tag object, but most time can treat it as commit
+    git log -1 --pretty=oneline mytag2
+
+    # git rev-parse return the id of tag, not commit
+    git rev-parse mytag2
+
+    # way to get the commit id that tag point to
+    git rev-parse mytag2^{commit}
+    git rev-parse mytag2^{}
+    git rev-parse mytag2^0
+    git rev-parse mytag2~0
+
+    # GPG-signed tag
+    gpg --gen-key
+    git tag -s -m "My first GPG-signed tag." mytag3
+
+    # varify
+    git tag -v mytag3
+
+    # delete tag(delete tag can not be restore)
+    git tag -d mytag
+
+    # tag not push to remote when git push
+    git push
+    git ls-remote origin my*
+
+    # specify tag when push
+    git push origin mytag
+
+    # push all tag to remote
+    git push origin refs/tags/*
+
+    # git pull will get tag
+    git pull
+    git tag -n1 -l my*
+
+    # update tag
+    git push origin mytag2
+    git pull origin refs/tags/mytag2:refs/tags/mytag2
+
+    # delete tag in remote
+    git push <remote_url> :<tagname>
+    git push origin :mytag2
+
+    # name of tag can be check by check-ref-format
+    git check-ref-format refs/tags/.name || echo "return $?, not valid ref"
+
 ### Delete and restore file
 
     # delete files(using: git rm)
