@@ -544,3 +544,19 @@ Note: .gitignore only work for files that untrached, file already add to index o
     git rev-list HEAD
 
     git ls-remote origin
+
+### Gitolite
+
+Error message:
+
+    william@desktop:~/tmp$ git clone git@desktop:gitolite-admin
+    Cloning into 'gitolite-admin'...
+    fatal: 'gitolite-admin' does not appear to be a git repository
+    fatal: The remote end hung up unexpectedly
+
+Possible Reason:
+
+    Note that you can also get this error if you have an ssh key in the remote servers authorized_keys file that isn’t prefixed with the “command” option. This can happen if you installed gitolite on a git user account that already had keys in that file. Simply delete or comment those keys out.
+
+(Gitolite makes a copy of that auth file before it adds new keys, it must be a bug that it left it in)
+
