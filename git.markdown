@@ -65,7 +65,7 @@
 
     git log --pretty=fuller
 
-### Short version os `status`
+### Short version of `status`
 
     git status -s
 
