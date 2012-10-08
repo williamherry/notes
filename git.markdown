@@ -560,3 +560,16 @@ Possible Reason:
 
 (Gitolite makes a copy of that auth file before it adds new keys, it must be a bug that it left it in)
 
+### git clone error
+
+Error message:
+
+    Initialized empty Git repository in /root/notes/.git/
+
+    (gnome-ssh-askpass:4841): Gtk-WARNING **: cannot open display:
+
+Possible Resion(from git@irc.freenode.com):
+
+    it seems like that you're using gnome-ssh-askpass to get authenticated which is a dialog, instand of commandline, and for some reason (a server or so), it cannot
+
+    if SSH_ASKPASS set in env, try to unset it
