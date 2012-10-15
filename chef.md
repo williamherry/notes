@@ -74,3 +74,10 @@ Definetions allow you to create new Resources by stringing together existing res
 
     knife cookbook bulk delete .*
     knife role bulk delete .*
+
+### Chef show some weird problem, finally find that it is coursed by full of disk
+
+### make chef-server listen to 127.0.0.1
+
+    vi /etc/sysconfig/chef-server
+    OPTIONS="-h 127.0.0.1"
