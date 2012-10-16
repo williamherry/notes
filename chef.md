@@ -81,3 +81,42 @@ Definetions allow you to create new Resources by stringing together existing res
 
     vi /etc/sysconfig/chef-server
     OPTIONS="-h 127.0.0.1"
+
+### Common Attributes
+
+    ignore_failure => If true, we will continue running the Recipese if this resource fails for any reason. (defaults to false)
+    provider       => The class name of a provider to use for this resource.
+    retries        => Number of times to cantch exceptions and retry the resource (defaults to 0). Requires Chef >= 0.10.4.
+    retry_delay    => Retry delay in seconds (defaults to 2). Requires Chef >= 0.10.4.
+    supports       => A hash of options that hint providers as to the capabilities of this resource.
+
+#### examples
+
+    gem_package "syntax" do
+      action :install
+      ignore_failure true
+    end
+
+### Check network first
+
+    ruby_block "check_internet" do
+      block do
+        require 'socket'
+
+        test_host = "www.google.com"
+        test_port = "www"
+        retries = 0
+
+        begin
+          s = TCPSocket.new(test_host, test_port)
+          s.close
+
+        rescue Errno::ETIMEDOUT
+          if retries < 3
+            retries += 1
+            Chef::Log.logger.send("warn", "Unable to connect to #{test_host}:#{test_port}, retry ##{retries}")
+            retry
+          end
+        end
+      end
+    end
