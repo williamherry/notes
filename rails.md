@@ -152,7 +152,7 @@
     end
 
     module Rails
-       class Server < ::Rack::Server                                                                                                                                                                             
+       class Server < ::Rack::Server                                                                                    
        end
     end
 
@@ -196,6 +196,168 @@
       server.run wrapped_app, options, &blk
     end
 
+### /home/william/.rvm/gems/ruby-2.4.0/gems/puma-3.10.0/lib/rack/handler/puma.rb
+    def self.run(app, options = {})
+        conf   = self.config(app, options)
+        
+        events = options.delete(:Silent) ? ::Puma::Events.strings : ::Puma::Events.stdio
+        
+        launcher = ::Puma::Launcher.new(conf, :events => events)
+        
+        yield launcher if block_given?
+        begin
+          launcher.run
+        rescue Interrupt
+          puts "* Gracefully stopping, waiting for requests to finish"
+          launcher.stop
+          puts "* Goodbye!"
+        end
+    end  
+### /home/william/.rvm/gems/ruby-2.4.0/gems/puma-3.10.0/lib/puma/launcher.rb
+    def run
+      previous_env =
+        if defined?(Bundler)
+          env = Bundler::ORIGINAL_ENV.dup
+          # add -rbundler/setup so we load from Gemfile when restarting
+          bundle = "-rbundler/setup"
+          env["RUBYOPT"] = [env["RUBYOPT"], bundle].join(" ") unless env["RUBYOPT"].to_s.include?(bundle)
+          env
+        else
+          ENV.to_h
+        end
+
+      @config.clamp
+
+      @config.plugins.fire_starts self
+
+      setup_signals
+      set_process_title
+      @runner.run
+
+      case @status
+      when :halt
+        log "* Stopping immediately!"
+      when :run, :stop
+        graceful_stop
+      when :restart
+        log "* Restarting..."
+        ENV.replace(previous_env)
+        @runner.before_restart
+        restart!
+      when :exit
+        # nothing
+      end
+    end
+### /home/william/.rvm/gems/ruby-2.4.0/gems/puma-3.10.0/lib/puma/single.rb
+    def run
+      already_daemon = false
+
+      if jruby_daemon?
+        require 'puma/jruby_restart'
+
+        if JRubyRestart.daemon?
+          # load and bind before redirecting IO so errors show up on stdout/stderr
+          load_and_bind
+          redirect_io
+        end
+
+        already_daemon = JRubyRestart.daemon_init
+      end
+
+      output_header "single"
+
+      if jruby_daemon?
+        if already_daemon
+          JRubyRestart.perm_daemonize
+        else
+          pid = nil
+
+          Signal.trap "SIGUSR2" do
+            log "* Started new process #{pid} as daemon..."
+
+            # Must use exit! so we don't unwind and run the ensures
+            # that will be run by the new child (such as deleting the
+            # pidfile)
+            exit!(true)
+          end
+
+          Signal.trap "SIGCHLD" do
+            log "! Error starting new process as daemon, exiting"
+            exit 1
+          end
+
+          jruby_daemon_start
+          sleep
+        end
+      else
+        if daemon?
+          log "* Daemonizing..."
+          Process.daemon(true)
+          redirect_io
+        end
+
+        load_and_bind
+      end
+
+      Plugins.fire_background
+
+      @launcher.write_state
+
+      start_control
+
+      @server = server = start_server
+
+      unless daemon?
+        log "Use Ctrl-C to stop"
+        redirect_io
+      end
+
+      @launcher.events.fire_on_booted!
+
+      begin
+        server.run.join
+      rescue Interrupt
+        # Swallow it
+      end
+    end
+
+### /home/william/.rvm/gems/ruby-2.4.0/gems/puma-3.10.0/lib/puma/runner.rb
+    def load_and_bind                                                                                                                                                                                       
+      unless @launcher.config.app_configured?
+        error "No application configured, nothing to run"
+        exit 1
+      end
+
+      # Load the app before we daemonize.
+      begin
+        @app = @launcher.config.app
+      rescue Exception => e
+        log "! Unable to load application: #{e.class}: #{e.message}"
+        raise e
+      end
+
+      @launcher.binder.parse @options[:binds], self
+    end
+
+    def start_server
+      min_t = @options[:min_threads]
+      max_t = @options[:max_threads]
+
+      server = Puma::Server.new app, @launcher.events, @options
+      server.min_threads = min_t
+      server.max_threads = max_t
+      server.inherit_binder @launcher.binder
+
+      if @options[:mode] == :tcp
+        server.tcp_mode!
+      end
+
+      unless development?
+        server.leak_stack_on_error = false
+      end
+
+      server
+    end
 
 
 
